@@ -1,9 +1,9 @@
 
-# devTinder Frontend
+# DevTinder Frontend
 
 ## 🚀 Overview
 
-**devTinder** is a MERN stack application where developers can create profiles, send connection requests, and connect with each other, similar to a networking platform. This repository contains the frontend for devTinder.
+**DevTinder** is a MERN stack application where developers can create profiles, send connection requests, and connect with each other, similar to a networking platform. This repository contains the frontend for DevTinder.
 
 ## 🛠 Tech Stack
 
@@ -48,7 +48,7 @@ npm run dev
 
 ## 🔧 API Endpoints
 
-The frontend interacts with the backend API hosted in the [devTinder-backend](https://github.com/harshmann10/DevTinder-backend). Ensure the backend is running before using the frontend.
+The frontend interacts with the backend API hosted in the [DevTinder-backend](https://github.com/harshmann10/DevTinder-backend). Ensure the backend is running before using the frontend.
 
 ## 🚀 Deployment
 
