@@ -11,7 +11,7 @@ function Body() {
             </main>
             <Footer />
         </div>
-    )
+    );
 }
 
-export default Body
+export default Body;
