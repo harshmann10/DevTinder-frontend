@@ -8,6 +8,7 @@ import { BASE_URL } from "../utils/constants";
 function Login() {
   const [emailId, setEmailId] = useState("narender@gmail.com");
   const [password, setPassword] = useState("narenderPassword@1");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ function Login() {
       dispatch(addUser(res.data));
       return navigate("/");
     } catch (err) {
+      setError(err.response?.data);
       console.error(err);
     }
   };
@@ -46,7 +48,7 @@ function Login() {
                 onChange={(e) => setEmailId(e.target.value)}
               />
             </label>
-            <label className="form-control w-full max-w-xs mb-4">
+            <label className="form-control w-full max-w-xs mb-1">
               <div className="label">
                 <span className="label-text">Password</span>
               </div>
@@ -59,6 +61,9 @@ function Login() {
               />
             </label>
           </div>
+          <p className="text-red-500 text-sm min-h-[1.25rem] text-center mb-1">
+            {error}
+          </p>
           <div className="card-actions justify-center">
             <button className="btn btn-primary" onClick={handleLogin}>
               Log-in
