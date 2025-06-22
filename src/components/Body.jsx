@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../utils/userSlice";
+import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
 
 function Body() {
@@ -21,6 +21,7 @@ function Body() {
         } catch (err) {
             if (err.response?.status === 401) {
                 navigate("/login");
+                dispatch(removeUser());
             }
             console.log(err);
         }
