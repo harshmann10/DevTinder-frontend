@@ -32,7 +32,7 @@ function Feed() {
 
   return (
     feed && (
-      <div className="flex justify-center mt-7">
+      <div className="flex justify-center mt-3">
         <UserCard user={feed.data[0]} />
       </div>
     )
