@@ -36,7 +36,7 @@ function EditProfile({ user }) {
     };
 
     return (
-        <div className="flex justify-evenly my-2">
+        <div className="flex justify-center gap-14 my-2">
             <div className="card bg-base-300 w-96 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title justify-center">Edit Profile</h2>

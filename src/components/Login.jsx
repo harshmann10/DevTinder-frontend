@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 function Login() {
-  const [emailId, setEmailId] = useState("narender@gmail.com");
-  const [password, setPassword] = useState("narenderPassword@1");
+  const [emailId, setEmailId] = useState("virat@gmail.com");
+  const [password, setPassword] = useState("viratPassword@1");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ function Login() {
                 <span className="label-text">Password</span>
               </div>
               <input
-                type="password"
+                type="text" // make a show password button
                 placeholder="Type Password here"
                 className="input input-bordered w-full max-w-xs"
                 value={password}

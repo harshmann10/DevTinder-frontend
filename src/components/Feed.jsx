@@ -28,7 +28,7 @@ function Feed() {
     if (!feed) {
       getFeed();
     }
-  }, [feed]);
+  }, []);
 
   return (
     feed && (
