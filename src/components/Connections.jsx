@@ -29,22 +29,25 @@ function Connections() {
 
     return (
         <div className="text-center mt-5">
-            <h1 className="font-bold text-3xl">Connections</h1>
+            <h1 className="font-bold text-3xl mb-7">Connections</h1>
             {connections.map((connection) => {
-                const { firstName, lastName, photoUrl, age, gender, about } =
+                const { _id, firstName, lastName, photoUrl, age, gender, about } =
                     connection;
                 return (
-                    <div className="container bg-base-300 m-4 p-4 rounded-lg flex w-3/4 mx-auto">
+                    <div
+                        key={_id}
+                        className="container bg-base-300 m-4 p-4 rounded-lg flex w-3/4 mx-auto"
+                    >
                         <img
                             className="w-32 h-32 object-cover rounded-full"
                             src={photoUrl}
                             alt="photo"
                         />
                         <div className="text-left mx-4">
-                            <h2 className="font-bold text-xl">
+                            <h2 className="font-bold text-xl mb-1">
                                 {firstName + " " + lastName}
                             </h2>
-                            <p>{age + ", " + gender}</p>
+                            <p className="mb-0.5">{age + ", " + gender}</p>
                             <p>{about}</p>
                         </div>
                     </div>
