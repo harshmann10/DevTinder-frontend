@@ -1,12 +1,25 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequest } from "../utils/requestSlice";
+import { addRequest, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
 
 function Requests() {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.requests);
+
+  const reviewRequest = async (status, _id) => {
+    try {
+      await axios.post(
+        BASE_URL + "/request/review/" + status + "/" + _id,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeRequest(_id));
+    } catch (err) {
+      console.error("Error reviewing request:", err);
+    }
+  };
 
   const fetchRequest = async () => {
     try {
@@ -14,9 +27,8 @@ function Requests() {
         withCredentials: true,
       });
       dispatch(addRequest(res.data.data));
-      console.log(res.data.data);
     } catch (err) {
-      throw new Error(err);
+      console.error("Error fetching requests:", err);
     }
   };
 
@@ -25,7 +37,12 @@ function Requests() {
   }, []);
 
   if (!requests) return;
-  if (requests.length === 0) return <h1>No requests found</h1>;
+  if (requests.length === 0)
+    return (
+      <h1 className="mt-10 text-center text-2xl font-semibold text-gray-500">
+        No requests found
+      </h1>
+    );
 
   return (
     <div className="text-center mt-5">
@@ -51,8 +68,18 @@ function Requests() {
               <p>{about}</p>
             </div>
             <div className="flex flex-row justify-center items-center gap-5">
-              <button className="btn btn-success">Accept</button>
-              <button className="btn btn-outline btn-error">Reject</button>
+              <button
+                className="btn btn-success"
+                onClick={() => reviewRequest("accepted", request._id)}
+              >
+                Accept
+              </button>
+              <button
+                className="btn btn-outline btn-error"
+                onClick={() => reviewRequest("rejected", request._id)}
+              >
+                Reject
+              </button>
             </div>
           </div>
         );

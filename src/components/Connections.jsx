@@ -25,7 +25,12 @@ function Connections() {
     }, []);
 
     if (!connections) return;
-    if (connections.length === 0) return <h1>No connections found</h1>;
+    if (connections.length === 0)
+        return (
+            <h1 className="mt-10 text-center text-2xl font-semibold text-gray-500">
+                No connections found
+            </h1>
+        );
 
     return (
         <div className="text-center mt-5">
