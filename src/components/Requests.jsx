@@ -1,8 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/constants";
+// import axios from "axios";
+// import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
+import api from "../utils/apiAxios";
 
 function Requests() {
   const dispatch = useDispatch();
@@ -10,11 +11,7 @@ function Requests() {
 
   const reviewRequest = async (status, _id) => {
     try {
-      await axios.post(
-        BASE_URL + "/request/review/" + status + "/" + _id,
-        {},
-        { withCredentials: true }
-      );
+      await api.post("/request/review/" + status + "/" + _id);
       dispatch(removeRequest(_id));
     } catch (err) {
       console.error("Error reviewing request:", err);
@@ -23,9 +20,7 @@ function Requests() {
 
   const fetchRequest = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/user/requests/received", {
-        withCredentials: true,
-      });
+      const res = await api.get("/user/requests/received");
       dispatch(addRequest(res.data.data));
     } catch (err) {
       console.error("Error fetching requests:", err);
@@ -37,7 +32,7 @@ function Requests() {
   }, []);
 
   if (!requests) return;
-  if (requests.length === 0)
+  if (requests && requests.length === 0)
     return (
       <h1 className="mt-10 text-center text-2xl font-semibold text-gray-500">
         No requests found
@@ -60,7 +55,7 @@ function Requests() {
               src={photoUrl}
               alt="photo"
             />
-            <div className="text-left mx-4">
+            <div className="text-left mx-4 grow">
               <h2 className="font-bold text-xl mb-1">
                 {firstName + " " + lastName}
               </h2>

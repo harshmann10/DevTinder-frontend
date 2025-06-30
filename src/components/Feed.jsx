@@ -1,5 +1,6 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/constants";
+// import axios from "axios";
+// import { BASE_URL } from "../utils/constants";
+import api from "../utils/apiAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import { useEffect } from "react";
@@ -12,15 +13,13 @@ function Feed() {
 
   const getFeed = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/user/feed", {
-        withCredentials: true,
-      });
-      dispatch(addFeed(res.data));
+      const res = await api.get("/user/feed");
+      dispatch(addFeed(res.data.data));
     } catch (err) {
-      if (err.response?.status === 401) {
-        dispatch(removeUser());
-      }
-      console.log(err);
+      // if (err.response?.status === 401) {
+      //   dispatch(removeUser());
+      // }
+      console.error("Failed to fetch feed:", err);
     }
   };
 
@@ -30,10 +29,18 @@ function Feed() {
     }
   }, []);
 
+  if (feed && feed.length <= 0)
+    return (
+      <h1 className="mt-10 text-center text-2xl font-semibold text-gray-500">
+        No new User found!
+      </h1>
+    );
+
   return (
-    feed && (
+    feed &&
+    feed.length > 0 && (
       <div className="flex justify-center mt-3">
-        <UserCard user={feed.data[0]} />
+        <UserCard user={feed[0]} />
       </div>
     )
   );

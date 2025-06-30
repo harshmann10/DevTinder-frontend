@@ -1,8 +1,9 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import axios from "axios";
-import { BASE_URL } from "../utils/constants";
+// import axios from "axios";
+// import { BASE_URL } from "../utils/constants";
+import api from "../utils/apiAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
@@ -14,16 +15,14 @@ function Body() {
 
     const fetchUser = async () => {
         try {
-            const user = await axios.get(BASE_URL + "/profile/view", {
-                withCredentials: true,
-            });
+            const user = await api.get("/profile/view");
             dispatch(addUser(user.data));
         } catch (err) {
             if (err.response?.status === 401) {
                 navigate("/login");
-                dispatch(removeUser());
+                // dispatch(removeUser());
             }
-            console.log(err);
+            console.error("Failed to fetch user profile:", err);
         }
     };
 

@@ -1,10 +1,12 @@
-import axios from "axios";
+// import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../utils/constants";
+// import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { removeFeed } from "../utils/feedSlice";
 import { removeConnection } from "../utils/connectionSlice";
+import { removeRequest } from "../utils/requestSlice";
+import api from "../utils/apiAxios";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -12,10 +14,11 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+      await api.post("/logout");
       dispatch(removeUser());
       dispatch(removeFeed());
       dispatch(removeConnection());
+      dispatch(removeRequest());
     } catch (err) {
       console.error(err);
     }
