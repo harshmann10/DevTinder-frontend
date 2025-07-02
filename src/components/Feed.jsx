@@ -4,21 +4,24 @@ import api from "../utils/apiAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import UserCard from "./UserCard";
 import { removeUser } from "../utils/userSlice";
 
 function Feed() {
   const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
+  const navigate = useNavigate();
 
   const getFeed = async () => {
     try {
       const res = await api.get("/user/feed");
       dispatch(addFeed(res.data.data));
     } catch (err) {
-      // if (err.response?.status === 401) {
-      //   dispatch(removeUser());
-      // }
+      if (err.response?.status === 401) {
+        dispatch(removeUser());
+        return navigate("/login");
+      }
       console.error("Failed to fetch feed:", err);
     }
   };

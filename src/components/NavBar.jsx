@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
 import { removeFeed } from "../utils/feedSlice";
 import { removeConnection } from "../utils/connectionSlice";
-import { removeRequest } from "../utils/requestSlice";
+import { clearRequests } from "../utils/requestSlice";
 import api from "../utils/apiAxios";
 
 const Navbar = () => {
@@ -18,7 +18,7 @@ const Navbar = () => {
       dispatch(removeUser());
       dispatch(removeFeed());
       dispatch(removeConnection());
-      dispatch(removeRequest());
+      dispatch(clearRequests());
     } catch (err) {
       console.error(err);
     }
@@ -28,19 +28,20 @@ const Navbar = () => {
     <div className="navbar bg-base-300">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl">
-          👨🏻‍💻Devtinder
+          <img src="/darklogo.png" alt="" className="w-8" />
+          Devtinder
         </Link>
       </div>
       {user && (
         <div className="flex-none gap-3 text-xl">
-          <p>Welcome, {user.firstName}</p>
+          <p>Welcome, {user.firstName} 👋</p>
           <div className="dropdown dropdown-end mr-4">
             <div
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-11 rounded-full">
+              <div className="w-10 rounded-full">
                 <img alt="user photo" src={user.photoUrl} />
               </div>
             </div>
@@ -50,17 +51,26 @@ const Navbar = () => {
             >
               <li>
                 <Link to="profile" className="justify-between">
-                  Profile
+                  Profile <span className="badge">🙎🏻‍♂️</span>
                 </Link>
               </li>
               <li>
-                <Link to="connections">Conncections</Link>
+                <Link to="connections">
+                  Conncections <span className="badge">💗</span>
+                </Link>
               </li>
               <li>
-                <Link to="requests">Requests</Link>
+                <Link to="requests">
+                  Requests <span className="badge">👁️</span>
+                </Link>
               </li>
               <li>
-                <Link onClick={handleLogout}>Logout</Link>
+                <Link
+                  onClick={handleLogout}
+                  className="text-red-400 hover:text-red-300"
+                >
+                  Logout
+                </Link>
               </li>
             </ul>
           </div>

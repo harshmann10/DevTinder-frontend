@@ -43,8 +43,16 @@ function Requests() {
     <div className="text-center mt-5">
       <h1 className="font-bold text-3xl mb-7">Connections Requests</h1>
       {requests.map((request) => {
-        const { _id, firstName, lastName, photoUrl, age, gender, about } =
-          request.fromUserId;
+        const {
+          _id,
+          firstName,
+          lastName,
+          photoUrl,
+          age,
+          gender,
+          about,
+          skills,
+        } = request.fromUserId;
         return (
           <div
             key={_id}
@@ -61,6 +69,16 @@ function Requests() {
               </h2>
               <p className="mb-0.5">{age + ", " + gender}</p>
               <p>{about}</p>
+              {skills?.length > 0 && (
+                <div className="card-actions my-1 items-baseline">
+                  <h3 className="font-semibold text-base">Skills:</h3>
+                  {skills.map((skill, index) => (
+                    <div key={index} className="badge badge-info badge-outline">
+                      {skill.trim()}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex flex-row justify-center items-center gap-5">
               <button

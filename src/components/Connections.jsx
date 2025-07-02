@@ -34,8 +34,16 @@ function Connections() {
         <div className="text-center mt-5">
             <h1 className="font-bold text-3xl mb-7">Connections</h1>
             {connections.map((connection) => {
-                const { _id, firstName, lastName, photoUrl, age, gender, about } =
-                    connection;
+                const {
+                    _id,
+                    firstName,
+                    lastName,
+                    photoUrl,
+                    age,
+                    gender,
+                    about,
+                    skills,
+                } = connection;
                 return (
                     <div
                         key={_id}
@@ -52,6 +60,16 @@ function Connections() {
                             </h2>
                             <p className="mb-0.5">{age + ", " + gender}</p>
                             <p>{about}</p>
+                            {skills?.length > 0 && (
+                                <div className="card-actions my-1 items-baseline">
+                                    <h3 className="font-semibold text-base">Skills:</h3>
+                                    {skills.map((skill, index) => (
+                                        <div key={index} className="badge badge-info badge-outline">
+                                            {skill.trim()}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 );

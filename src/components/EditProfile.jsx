@@ -9,10 +9,11 @@ import api from "../utils/apiAxios";
 function EditProfile({ user }) {
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
-    const [age, setAge] = useState(user.age);
-    const [gender, setGender] = useState(user.gender);
+    const [age, setAge] = useState(user.age || "");
+    const [gender, setGender] = useState(user.gender || "");
     const [about, setAbout] = useState(user.about);
     const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
+    const [skills, setSkills] = useState(user.skills || []);
     const [error, setError] = useState("");
     const [showtoast, setShowToast] = useState(false);
     const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function EditProfile({ user }) {
                 gender,
                 about,
                 photoUrl,
+                skills,
             });
             dispatch(addUser(res.data?.data));
             setShowToast(true);
@@ -110,10 +112,22 @@ function EditProfile({ user }) {
                         </label>
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
+                                <span className="label-text">Skills</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Enter your Skills"
+                                className="input input-bordered w-full max-w-xs"
+                                value={skills}
+                                onChange={(e) => setSkills(e.target.value.split(","))}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
                                 <span className="label-text">About</span>
                             </div>
                             <textarea
-                                rows={1}
+                                rows={2}
                                 placeholder="Enter your About here"
                                 className="textarea textarea-bordered"
                                 value={about}
@@ -130,7 +144,7 @@ function EditProfile({ user }) {
                 </div>
             </div>
             <UserCard
-                user={{ firstName, lastName, age, gender, about, photoUrl }}
+                user={{ firstName, lastName, age, gender, about, photoUrl, skills }}
                 className="self-start"
                 actionsDisabled={true}
             />
@@ -159,13 +173,13 @@ function EditProfile({ user }) {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                stroke-width="1.5"
+                                strokeWidth="1.5"
                                 stroke="currentColor"
-                                class="size-6"
+                                className="size-6"
                             >
                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                     d="M6 18 18 6M6 6l12 12"
                                 />
                             </svg>
