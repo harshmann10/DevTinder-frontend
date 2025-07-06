@@ -35,7 +35,7 @@ function UserCard({ user, className, actionsDisabled = false }) {
                         ))}
                     </div>
                 )}
-                <div className="card-actions justify-center mt-2">
+                <div className="card-actions justify-center mt-2 gap-6">
                     <button
                         className="btn btn-success"
                         onClick={() =>

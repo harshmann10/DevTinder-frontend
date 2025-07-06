@@ -19,7 +19,7 @@ function Body() {
             dispatch(addUser(user.data));
         } catch (err) {
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate("/");
                 // dispatch(removeUser());
             }
             console.error("Failed to fetch user profile:", err);
@@ -35,7 +35,7 @@ function Body() {
     return (
         <div className="flex flex-col min-h-screen">
             <NavBar />
-            <main className="flex-grow">
+            <main className="flex-grow mb-2">
                 <Outlet />
             </main>
             <Footer />

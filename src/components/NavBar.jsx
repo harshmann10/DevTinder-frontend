@@ -27,14 +27,14 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-300">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
-          <img src="/darklogo.png" alt="" className="w-8" />
-          Devtinder
+        <Link to="/" className="btn btn-ghost text-xl ">
+          <img src="/icon.svg" alt="icon" />
+          <span className="text-white">DevTinder</span>
         </Link>
       </div>
       {user && (
         <div className="flex-none gap-3 text-xl">
-          <p>Welcome, {user.firstName} 👋</p>
+          <p>Welcome, {user.firstName} </p>
           <div className="dropdown dropdown-end mr-4">
             <div
               tabIndex={0}
