@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import {
   Body,
   Login,
@@ -7,6 +7,8 @@ import {
   Connections,
   Requests,
   HomePage,
+  SignUp,
+  ChangePassword,
 } from "./components";
 import { useSelector } from "react-redux";
 
@@ -18,7 +20,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Body />}>
             <Route path="" element={user ? <Feed /> : <HomePage />} />
-            <Route path="login" element={<Login />} />
+            <Route
+              path="login"
+              element={user ? <Navigate to="/" replace /> : <Login />}
+            />
+            <Route
+              path="signup"
+              element={user ? <Navigate to="/" replace /> : <SignUp />}
+            />
             <Route path="profile" element={<Profile />} />
             <Route path="connections" element={<Connections />} />
             <Route path="requests" element={<Requests />} />

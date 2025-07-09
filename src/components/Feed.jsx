@@ -43,7 +43,9 @@ function Feed() {
     feed &&
     feed.length > 0 && (
       <div className="flex justify-center mt-3">
-        <UserCard user={feed[0]} />
+        <div className="w-96">
+          <UserCard user={feed[0]} />
+        </div>
       </div>
     )
   );

@@ -35,7 +35,7 @@ function Body() {
     return (
         <div className="flex flex-col min-h-screen">
             <NavBar />
-            <main className="flex-grow mb-2">
+            <main className="flex-grow mb-2 flex justify-center items-center">
                 <Outlet />
             </main>
             <Footer />

@@ -1,11 +1,11 @@
 const Footer = () => {
     return (
-        <footer className="footer bg-base-300 text-neutral-content items-center justify-around p-4">
+        <footer className="flex flex-col md:flex-row bg-base-300 text-neutral-content items-center justify-around p-4 gap-4">
             <div className="flex items-center gap-2">
                 <img src="/icon.svg" alt="icon" />
                 <span className="text-white text-xl">DevTinder</span>
             </div>
-            <aside className="flex flex-col items-center">
+            <aside className="flex flex-col items-center text-center">
                 <p>DevTinder - Connecting Developers since 2025</p>
                 <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
             </aside>

@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import api from "../utils/apiAxios";
 
-function EditProfile({ user }) {
+function EditProfile({ user, setHideChangePassword }) {
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [age, setAge] = useState(user.age || "");
@@ -42,8 +42,8 @@ function EditProfile({ user }) {
     };
 
     return (
-        <div className="flex justify-center gap-14 my-2">
-            <div className="card bg-base-300 w-96 shadow-xl">
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-6 md:gap-14 my-2 px-4">
+            <div className="card bg-base-300 w-full max-w-md md:w-96 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title justify-center">Edit Profile</h2>
                     <div>
@@ -136,18 +136,29 @@ function EditProfile({ user }) {
                         </label>
                     </div>
                     <p className="text-red-500 text-sm text-center">{error}</p>
-                    <div className="card-actions justify-center mt-2">
-                        <button className="btn btn-primary" onClick={saveProfile}>
-                            Save Profile
-                        </button>
+                    <div className="flex justify-center gap-5">
+                        <div className="card-actions justify-center mt-2">
+                            <button className="btn btn-primary" onClick={saveProfile}>
+                                Save Profile
+                            </button>
+                        </div>
+                        <div className="card-actions justify-center mt-2">
+                            <button
+                                className="btn btn-outline btn-primary"
+                                onClick={() => setHideChangePassword(false)}
+                            >
+                                Change Password
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <UserCard
-                user={{ firstName, lastName, age, gender, about, photoUrl, skills }}
-                className="self-start"
-                actionsDisabled={true}
-            />
+            <div className="w-full max-w-md md:w-96 self-start">
+                <UserCard
+                    user={{ firstName, lastName, age, gender, about, photoUrl, skills }}
+                    actionsDisabled={true}
+                />
+            </div>
             {showtoast && (
                 <div className="toast toast-top toast-center">
                     <div className="alert alert-success">

@@ -4,7 +4,7 @@ import api from "../utils/apiAxios";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
-function UserCard({ user, className, actionsDisabled = false }) {
+function UserCard({ user, actionsDisabled = false }) {
     const dispatch = useDispatch();
     const { _id, firstName, lastName, age, gender, about, photoUrl, skills } =
         user;
@@ -17,7 +17,7 @@ function UserCard({ user, className, actionsDisabled = false }) {
         }
     };
     return (
-        <div className={`card bg-base-300 w-96 shadow-xl ${className || ""}`}>
+        <div className={`card bg-base-300 shadow-xl`}>
             <figure className="px-8 mx-5 max-h-80">
                 <img src={photoUrl} alt="Photo" />
             </figure>

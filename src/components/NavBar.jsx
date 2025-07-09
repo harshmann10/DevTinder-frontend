@@ -29,10 +29,10 @@ const Navbar = () => {
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl ">
           <img src="/icon.svg" alt="icon" />
-          <span className="text-white">DevTinder</span>
+          <span className="hidden md:inline text-white">DevTinder</span>
         </Link>
       </div>
-      {user && (
+      {user ? (
         <div className="flex-none gap-3 text-xl">
           <p>Welcome, {user.firstName} </p>
           <div className="dropdown dropdown-end mr-4">
@@ -75,7 +75,15 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-      )}
+      ) : (
+          <div className="flex gap-4 mr-10">
+            <Link to={"/signup"}>
+              <button className="btn px-5 btn-primary">Sign Up</button>
+            </Link>
+            <Link to={"/login"}>
+              <button className="btn px-5 btn-outline">Log In</button>
+            </Link>
+          </div>)}
     </div>
   );
 };
