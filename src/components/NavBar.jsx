@@ -1,7 +1,5 @@
-// import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { removeFeed } from "../utils/feedSlice";
 import { removeConnection } from "../utils/connectionSlice";
@@ -25,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-base-300">
+    <div className="navbar bg-black/30 backdrop-blur-md sticky top-0 z-10">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl ">
           <img src="/icon.svg" alt="icon" />
@@ -76,14 +74,14 @@ const Navbar = () => {
           </div>
         </div>
       ) : (
-          <div className="flex gap-4 mr-10">
-            <Link to={"/signup"}>
-              <button className="btn px-5 btn-primary">Sign Up</button>
-            </Link>
-            <Link to={"/login"}>
-              <button className="btn px-5 btn-outline">Log In</button>
-            </Link>
-          </div>)}
+        <div className="flex gap-4 mr-10">
+          <Link to={"/signup"}>
+            <button className="btn px-5 btn-primary">Sign Up</button>
+          </Link>
+          <Link to={"/login"}>
+            <button className="btn px-5 btn-outline">Log In</button>
+          </Link>
+        </div>)}
     </div>
   );
 };

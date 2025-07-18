@@ -27,9 +27,9 @@ function Hero() {
             </div>
             <div className="mt-10 md:mt-0">
                 <img
-                    src="/dev.png"
+                    src="/dev.svg"
                     alt="Developer coding illustration"
-                    className="w-96 mx-auto"
+                    className="w-[420px] mx-auto"
                 />
             </div>
         </section>

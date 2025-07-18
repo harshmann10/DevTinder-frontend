@@ -8,7 +8,6 @@ import {
   Requests,
   HomePage,
   SignUp,
-  ChangePassword,
 } from "./components";
 import { useSelector } from "react-redux";
 

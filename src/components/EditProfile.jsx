@@ -1,10 +1,13 @@
 import { useState } from "react";
 import UserCard from "./UserCard";
-// import axios from "axios";
-// import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import api from "../utils/apiAxios";
+import { useNavigate } from "react-router-dom";
+import { removeUser } from "../utils/userSlice";
+import { removeFeed } from "../utils/feedSlice"; 
+import { removeConnection } from "../utils/connectionSlice"; 
+import { clearRequests } from "../utils/requestSlice"; 
 
 function EditProfile({ user, setHideChangePassword }) {
     const [firstName, setFirstName] = useState(user.firstName);
@@ -16,7 +19,10 @@ function EditProfile({ user, setHideChangePassword }) {
     const [skills, setSkills] = useState(user.skills || []);
     const [error, setError] = useState("");
     const [showtoast, setShowToast] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false); 
+    const [deleteToast, setDeleteToast] = useState({ show: false, message: "", type: "" });
     const dispatch = useDispatch();
+    const navigate = useNavigate(); 
 
     const saveProfile = async () => {
         setError("");
@@ -38,6 +44,30 @@ function EditProfile({ user, setHideChangePassword }) {
             }, 3000);
         } catch (err) {
             setError(err.response.data);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            await api.delete("/profile/delete");
+            dispatch(removeUser());
+            dispatch(removeFeed());
+            dispatch(removeConnection());
+            dispatch(clearRequests());
+            setDeleteToast({ show: true, message: "Your account has been deleted successfully!", type: "success" });
+            const timer = setTimeout(() => {
+                setDeleteToast({ show: false, message: "", type: "" });
+                navigate("/");
+                clearTimeout(timer);
+            }, 3000);
+        } catch (err) {
+            setDeleteToast({ show: true, message: "Failed to delete account: " + err.response?.data || err.message, type: "error" });
+            const timer = setTimeout(() => {
+                setDeleteToast({ show: false, message: "", type: "" });
+                clearTimeout(timer);
+            }, 3000);
+        } finally {
+            setShowDeleteModal(false);
         }
     };
 
@@ -136,18 +166,24 @@ function EditProfile({ user, setHideChangePassword }) {
                         </label>
                     </div>
                     <p className="text-red-500 text-sm text-center">{error}</p>
-                    <div className="flex justify-center gap-5">
-                        <div className="card-actions justify-center mt-2">
+                    <div className="flex flex-col gap-3 justify-center mt-2">
+                        <div className="card-actions justify-center gap-5">
                             <button className="btn btn-primary" onClick={saveProfile}>
                                 Save Profile
                             </button>
-                        </div>
-                        <div className="card-actions justify-center mt-2">
                             <button
                                 className="btn btn-outline btn-primary"
                                 onClick={() => setHideChangePassword(false)}
                             >
                                 Change Password
+                            </button>
+                        </div>
+                        <div className="card-actions justify-center">
+                            <button
+                                className="btn btn-error btn-outline"
+                                onClick={() => setShowDeleteModal(true)}
+                            >
+                                Delete Account
                             </button>
                         </div>
                     </div>
@@ -179,6 +215,66 @@ function EditProfile({ user, setHideChangePassword }) {
                         <button
                             className="btn btn-sm btn-circle btn-ghost text-error hover:bg-gray-800"
                             onClick={() => setShowToast(false)}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="size-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 18 18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
+            {showDeleteModal && (
+                <div className="modal modal-open">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg">Confirm Account Deletion</h3>
+                        <p className="py-4">Are you sure you want to delete your account? This action cannot be undone.</p>
+                        <div className="modal-action">
+                            <button className="btn btn-error" onClick={handleDeleteAccount}>Delete</button>
+                            <button className="btn btn-ghost" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {deleteToast.show && (
+                <div className="toast toast-top toast-center">
+                    <div className={`alert alert-${deleteToast.type}`}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            {deleteToast.type === "success" ? (
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            ) : (
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            )}
+                        </svg>
+                        <span>{deleteToast.message}</span>
+                        <button
+                            className="btn btn-sm btn-circle btn-ghost text-error hover:bg-gray-800"
+                            onClick={() => setDeleteToast({ show: false, message: "", type: "" })}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

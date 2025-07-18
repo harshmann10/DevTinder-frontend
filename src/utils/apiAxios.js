@@ -13,10 +13,9 @@ const api = axios.create({
 
 // Response interceptor to handle auth errors
 api.interceptors.response.use(
-    (response) => response, // Pass through successful responses
+    (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Dispatch the logout action to clear user state
             const { dispatch } = appStore;
             dispatch(removeUser());
             dispatch(removeFeed());
