@@ -8,7 +8,7 @@ import {
   Requests,
   HomePage,
   SignUp,
-  ForgotPasswordUsingEmail,
+  ForgotPassword,
   ResetPassword,
 } from "./components";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ function App() {
             />
             <Route
               path="forgot-password"
-              element={<ForgotPasswordUsingEmail />}
+              element={user ? <Navigate to="/" replace /> : <ForgotPassword />}
             />
             <Route path="profile" element={<Profile />} />
             <Route path="connections" element={<Connections />} />

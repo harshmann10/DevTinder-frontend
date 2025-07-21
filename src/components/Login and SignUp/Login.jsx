@@ -111,7 +111,7 @@ function Login() {
               </span>
             </div>
           </label>
-          <p className="text-red-500 text-sm min-h-[1.25rem] text-center mb-1">
+          <p className="text-red-500 text-sm text-center">
             {error}
           </p>
           <div className="card-actions justify-center">
