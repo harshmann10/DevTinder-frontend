@@ -1,11 +1,9 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-// import axios from "axios";
-// import { BASE_URL } from "../utils/constants";
 import api from "../utils/apiAxios";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, removeUser } from "../utils/userSlice";
+import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
 
 function Body() {
@@ -19,10 +17,10 @@ function Body() {
             dispatch(addUser(user.data));
         } catch (err) {
             if (err.response?.status === 401) {
-                navigate("/");
-                // dispatch(removeUser());
+                navigate("/login");
             }
             console.error("Failed to fetch user profile:", err);
+            navigate("/");
         }
     };
 
@@ -35,7 +33,7 @@ function Body() {
     return (
         <div className="flex flex-col min-h-screen">
             <NavBar />
-            <main className="flex-grow mb-2 flex justify-center items-center">
+            <main className="flex-grow mb-2">
                 <Outlet />
             </main>
             <Footer />

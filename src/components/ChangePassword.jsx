@@ -3,11 +3,12 @@ import api from "../utils/apiAxios";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../utils/userSlice";
 
-const ChangePassword = ({ setHideChangePassword }) => {
+const ChangePassword = ({ setMode }) => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [showtoast, setShowToast] = useState(false);
     const [message, setMessage] = useState(false);
     const dispatch = useDispatch();
@@ -15,9 +16,11 @@ const ChangePassword = ({ setHideChangePassword }) => {
     const handlePassword = async (e) => {
         e.preventDefault();
         if (newPassword !== confirmPassword) {
-            return setError("New passwords do not match.");
+            return setError("New password and confirm password do not match.");
         }
+        if (isSubmitting) return;
         setError("");
+        setIsSubmitting(true);
         try {
             const res = await api.patch("profile/edit/password", {
                 currentPassword,
@@ -31,6 +34,8 @@ const ChangePassword = ({ setHideChangePassword }) => {
         } catch (error) {
             console.log(error);
             setError(error.response?.data || "An unexpected error occurred.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
     return (
@@ -78,20 +83,21 @@ const ChangePassword = ({ setHideChangePassword }) => {
                         {error}
                     </p>
                     <div className="card-actions justify-center gap-4">
-                        <button className="btn btn-primary" onClick={handlePassword}>
-                            Save Changes
-                        </button>
                         <button
-                            className="btn btn-ghost"
-                            onClick={() => setHideChangePassword(true)}
+                            className="btn btn-primary"
+                            onClick={handlePassword}
+                            disabled={isSubmitting}
                         >
+                            {isSubmitting ? "Saving..." : "Save Changes"}
+                        </button>
+                        <button className="btn btn-ghost" onClick={() => setMode("view")}>
                             Back to Profile
                         </button>
                     </div>
                 </div>
             </div>
             {showtoast && (
-                <div className="toast toast-top toast-center">
+                <div className="toast toast-top toast-center z-50">
                     <div className="alert alert-success">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

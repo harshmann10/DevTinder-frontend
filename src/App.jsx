@@ -8,6 +8,8 @@ import {
   Requests,
   HomePage,
   SignUp,
+  ForgotPasswordUsingEmail,
+  ResetPassword,
 } from "./components";
 import { useSelector } from "react-redux";
 
@@ -27,11 +29,16 @@ function App() {
               path="signup"
               element={user ? <Navigate to="/" replace /> : <SignUp />}
             />
+            <Route
+              path="forgot-password"
+              element={<ForgotPasswordUsingEmail />}
+            />
             <Route path="profile" element={<Profile />} />
             <Route path="connections" element={<Connections />} />
             <Route path="requests" element={<Requests />} />
             <Route path="*" element={user ? <Feed /> : <HomePage />} />
           </Route>
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
       </BrowserRouter>
     </>

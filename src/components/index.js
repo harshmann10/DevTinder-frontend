@@ -9,6 +9,8 @@ import Requests from "./Requests";
 import HomePage from "./BeforeLogin/HomePage";
 import SignUp from "./Login and SignUp/SignUp";
 import ChangePassword from "./ChangePassword";
+import ForgotPasswordUsingEmail from ".//Login and SignUp/ForgotPasswordUsingEmail";
+import ResetPassword from "./Login and SignUp/ResetPassword";
 
 export {
     NavBar,
@@ -22,4 +24,6 @@ export {
     HomePage,
     SignUp,
     ChangePassword,
+    ForgotPasswordUsingEmail,
+    ResetPassword,
 };

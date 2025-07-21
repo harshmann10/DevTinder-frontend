@@ -102,6 +102,14 @@ function Login() {
                 )}
               </button>
             </div>
+            <div className="label">
+              <span
+                className="text-sm mt-1 link link-hover"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forget Password?
+              </span>
+            </div>
           </label>
           <p className="text-red-500 text-sm min-h-[1.25rem] text-center mb-1">
             {error}

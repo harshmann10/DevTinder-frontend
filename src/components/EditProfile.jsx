@@ -5,42 +5,68 @@ import { addUser } from "../utils/userSlice";
 import api from "../utils/apiAxios";
 import { useNavigate } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
-import { removeFeed } from "../utils/feedSlice"; 
-import { removeConnection } from "../utils/connectionSlice"; 
-import { clearRequests } from "../utils/requestSlice"; 
+import { removeFeed } from "../utils/feedSlice";
+import { removeConnection } from "../utils/connectionSlice";
+import { clearRequests } from "../utils/requestSlice";
 
-function EditProfile({ user, setHideChangePassword }) {
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
-    const [age, setAge] = useState(user.age || "");
-    const [gender, setGender] = useState(user.gender || "");
-    const [about, setAbout] = useState(user.about);
-    const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-    const [skills, setSkills] = useState(user.skills || []);
+function EditProfile({ user, setMode }) {
+    const [profileData, setProfileData] = useState({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        age: user.age || "",
+        gender: user.gender || "",
+        about: user.about,
+        photoUrl: user.photoUrl,
+        skills: user.skills || [],
+        socialLinks: user.socialLinks || { github: "", linkedin: "", twitter: "" },
+    });
     const [error, setError] = useState("");
     const [showtoast, setShowToast] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false); 
-    const [deleteToast, setDeleteToast] = useState({ show: false, message: "", type: "" });
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteToast, setDeleteToast] = useState({
+        show: false,
+        message: "",
+        type: "",
+    });
     const dispatch = useDispatch();
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+
+    const handleProfileDataChange = (e) => {
+        const { name, value } = e.target;
+        setProfileData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSkillsChange = (e) => {
+        setProfileData((prevData) => ({
+            ...prevData,
+            skills: e.target.value.split(",").map((skill) => skill.trim()),
+        }));
+    };
+
+    const handleSocialLinksChange = (e) => {
+        const { name, value } = e.target;
+        setProfileData((prevData) => ({
+            ...prevData,
+            socialLinks: {
+                ...prevData.socialLinks,
+                [name]: value,
+            },
+        }));
+    };
 
     const saveProfile = async () => {
         setError("");
         try {
-            const res = await api.patch("/profile/edit", {
-                firstName,
-                lastName,
-                age,
-                gender,
-                about,
-                photoUrl,
-                skills,
-            });
+            const res = await api.patch("/profile/edit", profileData);
             dispatch(addUser(res.data?.data));
             setShowToast(true);
             const timer = setTimeout(() => {
                 setShowToast(false);
                 clearTimeout(timer);
+                setMode("view");
             }, 3000);
         } catch (err) {
             setError(err.response.data);
@@ -50,18 +76,27 @@ function EditProfile({ user, setHideChangePassword }) {
     const handleDeleteAccount = async () => {
         try {
             await api.delete("/profile/delete");
-            dispatch(removeUser());
-            dispatch(removeFeed());
-            dispatch(removeConnection());
-            dispatch(clearRequests());
-            setDeleteToast({ show: true, message: "Your account has been deleted successfully!", type: "success" });
+            setDeleteToast({
+                show: true,
+                message: "Your account has been deleted successfully!",
+                type: "success",
+            });
             const timer = setTimeout(() => {
+                dispatch(removeUser());
+                dispatch(removeFeed());
+                dispatch(removeConnection());
+                dispatch(clearRequests());
                 setDeleteToast({ show: false, message: "", type: "" });
                 navigate("/");
                 clearTimeout(timer);
             }, 3000);
         } catch (err) {
-            setDeleteToast({ show: true, message: "Failed to delete account: " + err.response?.data || err.message, type: "error" });
+            setDeleteToast({
+                show: true,
+                message:
+                    "Failed to delete account: " + err.response?.data || err.message,
+                type: "error",
+            });
             const timer = setTimeout(() => {
                 setDeleteToast({ show: false, message: "", type: "" });
                 clearTimeout(timer);
@@ -85,8 +120,9 @@ function EditProfile({ user, setHideChangePassword }) {
                                 type="text"
                                 placeholder="Enter your First Name here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                name="firstName" // Added name attribute
+                                value={profileData.firstName}
+                                onChange={handleProfileDataChange}
                             />
                         </label>
                         <label className="form-control w-full max-w-xs">
@@ -97,8 +133,9 @@ function EditProfile({ user, setHideChangePassword }) {
                                 type="text"
                                 placeholder="Enter your Last Name here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                name="lastName" // Added name attribute
+                                value={profileData.lastName}
+                                onChange={handleProfileDataChange}
                             />
                         </label>
                         <label className="form-control w-full max-w-xs">
@@ -109,8 +146,9 @@ function EditProfile({ user, setHideChangePassword }) {
                                 type="text"
                                 placeholder="Enter your Age here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={age}
-                                onChange={(e) => setAge(e.target.value)}
+                                name="age" // Added name attribute
+                                value={profileData.age}
+                                onChange={handleProfileDataChange}
                             />
                         </label>
                         <label className="form-control w-full max-w-xs">
@@ -119,8 +157,9 @@ function EditProfile({ user, setHideChangePassword }) {
                             </div>
                             <select
                                 className="input input-bordered w-full max-w-xs"
-                                value={gender}
-                                onChange={(e) => setGender(e.target.value)}
+                                name="gender" // Added name attribute
+                                value={profileData.gender}
+                                onChange={handleProfileDataChange}
                             >
                                 <option value="">--Please choose an option--</option>
                                 <option value="male">Male</option>
@@ -136,20 +175,22 @@ function EditProfile({ user, setHideChangePassword }) {
                                 type="text"
                                 placeholder="Enter your Photo URL here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={photoUrl}
-                                onChange={(e) => setPhotoUrl(e.target.value)}
+                                name="photoUrl" // Added name attribute
+                                value={profileData.photoUrl}
+                                onChange={handleProfileDataChange}
                             />
                         </label>
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
-                                <span className="label-text">Skills</span>
+                                <span className="label-text">Skills (comma-separated)</span>
                             </div>
                             <input
                                 type="text"
                                 placeholder="Enter your Skills"
                                 className="input input-bordered w-full max-w-xs"
-                                value={skills}
-                                onChange={(e) => setSkills(e.target.value.split(","))}
+                                name="skills" // Added name attribute
+                                value={profileData.skills.join(", ")}
+                                onChange={handleSkillsChange}
                             />
                         </label>
                         <label className="form-control w-full max-w-xs">
@@ -160,8 +201,48 @@ function EditProfile({ user, setHideChangePassword }) {
                                 rows={2}
                                 placeholder="Enter your About here"
                                 className="textarea textarea-bordered"
-                                value={about}
-                                onChange={(e) => setAbout(e.target.value)}
+                                name="about" // Added name attribute
+                                value={profileData.about}
+                                onChange={handleProfileDataChange}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">GitHub URL</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Enter your GitHub URL"
+                                className="input input-bordered w-full max-w-xs"
+                                name="github"
+                                value={profileData.socialLinks.github}
+                                onChange={handleSocialLinksChange}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">LinkedIn URL</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Enter your LinkedIn URL"
+                                className="input input-bordered w-full max-w-xs"
+                                name="linkedin"
+                                value={profileData.socialLinks.linkedin}
+                                onChange={handleSocialLinksChange}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">Twitter URL</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Enter your Twitter URL"
+                                className="input input-bordered w-full max-w-xs"
+                                name="twitter"
+                                value={profileData.socialLinks.twitter}
+                                onChange={handleSocialLinksChange}
                             />
                         </label>
                     </div>
@@ -172,10 +253,10 @@ function EditProfile({ user, setHideChangePassword }) {
                                 Save Profile
                             </button>
                             <button
-                                className="btn btn-outline btn-primary"
-                                onClick={() => setHideChangePassword(false)}
+                                className="btn btn-primary btn-outline"
+                                onClick={() => setMode("view")}
                             >
-                                Change Password
+                                Back to Profile
                             </button>
                         </div>
                         <div className="card-actions justify-center">
@@ -190,13 +271,10 @@ function EditProfile({ user, setHideChangePassword }) {
                 </div>
             </div>
             <div className="w-full max-w-md md:w-96 self-start">
-                <UserCard
-                    user={{ firstName, lastName, age, gender, about, photoUrl, skills }}
-                    actionsDisabled={true}
-                />
+                <UserCard user={profileData} actionsDisabled={true} />
             </div>
             {showtoast && (
-                <div className="toast toast-top toast-center">
+                <div className="toast toast-top toast-center z-50">
                     <div className="alert alert-success">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -238,16 +316,26 @@ function EditProfile({ user, setHideChangePassword }) {
                 <div className="modal modal-open">
                     <div className="modal-box">
                         <h3 className="font-bold text-lg">Confirm Account Deletion</h3>
-                        <p className="py-4">Are you sure you want to delete your account? This action cannot be undone.</p>
+                        <p className="py-4">
+                            Are you sure you want to delete your account? This action cannot
+                            be undone.
+                        </p>
                         <div className="modal-action">
-                            <button className="btn btn-error" onClick={handleDeleteAccount}>Delete</button>
-                            <button className="btn btn-ghost" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                            <button className="btn btn-error" onClick={handleDeleteAccount}>
+                                Delete
+                            </button>
+                            <button
+                                className="btn btn-ghost"
+                                onClick={() => setShowDeleteModal(false)}
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
             {deleteToast.show && (
-                <div className="toast toast-top toast-center">
+                <div className="toast toast-top toast-center z-50">
                     <div className={`alert alert-${deleteToast.type}`}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +362,9 @@ function EditProfile({ user, setHideChangePassword }) {
                         <span>{deleteToast.message}</span>
                         <button
                             className="btn btn-sm btn-circle btn-ghost text-error hover:bg-gray-800"
-                            onClick={() => setDeleteToast({ show: false, message: "", type: "" })}
+                            onClick={() =>
+                                setDeleteToast({ show: false, message: "", type: "" })
+                            }
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

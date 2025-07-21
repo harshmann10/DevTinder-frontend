@@ -24,7 +24,7 @@ function SignUp() {
                 password,
             });
             dispatch(addUser(res.data.data));
-            return navigate("/profile");
+            return navigate("/profile", { state: { mode: "edit" } });
         } catch (err) {
             setError(err.response?.data || "Signup failed");
             console.error("Signup error:", err);
