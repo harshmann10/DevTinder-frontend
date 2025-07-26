@@ -52,7 +52,7 @@ const ShippingAndDelivery = () => {
                             If you have any questions regarding access to our digital
                             services, please contact us at:
                         </p>
-                        <p className="mt-2 mb-4">Email: [Your Support Email]</p>
+                        <p className="mt-2 mb-4">Email: devtinder6@gmail.com</p>
                     </section>
                 </div>
             </div>
