@@ -11,6 +11,11 @@ import SignUp from "./Login and SignUp/SignUp";
 import ChangePassword from "./ChangePassword";
 import ForgotPassword from "./Login and SignUp/ForgotPassword";
 import ResetPassword from "./Login and SignUp/ResetPassword";
+import ContactUs from "./policy/ContactUs";
+import PrivacyPolicy from "./policy/PrivacyPolicy";
+import TermsOfService from "./policy/TermsOfService";
+import CancellationAndRefund from "./policy/CancellationAndRefund";
+import ShippingAndDelivery from "./policy/ShippingAndDelivery";
 
 export {
     NavBar,
@@ -26,4 +31,9 @@ export {
     ChangePassword,
     ForgotPassword,
     ResetPassword,
+    ContactUs,
+    PrivacyPolicy,
+    TermsOfService,
+    CancellationAndRefund,
+    ShippingAndDelivery,
 };

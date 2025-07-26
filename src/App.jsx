@@ -10,6 +10,11 @@ import {
   SignUp,
   ForgotPassword,
   ResetPassword,
+  TermsOfService,
+  ContactUs,
+  PrivacyPolicy,
+  CancellationAndRefund,
+  ShippingAndDelivery,
 } from "./components";
 import { useSelector } from "react-redux";
 
@@ -33,6 +38,11 @@ function App() {
               path="forgot-password"
               element={user ? <Navigate to="/" replace /> : <ForgotPassword />}
             />
+            <Route path="terms-of-service" element={<TermsOfService />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="contact-us" element={<ContactUs />} />
+            <Route path="cancellation-and-refund" element={<CancellationAndRefund />} />
+            <Route path="shipping-And-delivery" element={<ShippingAndDelivery />} />
             <Route path="profile" element={<Profile />} />
             <Route path="connections" element={<Connections />} />
             <Route path="requests" element={<Requests />} />

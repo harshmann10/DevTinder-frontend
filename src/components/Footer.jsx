@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
     return (
         <footer className="flex flex-col md:flex-row bg-base-300 text-neutral-content items-center justify-around p-4 gap-4">
@@ -8,10 +10,27 @@ const Footer = () => {
             <aside className="flex flex-col items-center text-center">
                 <p>DevTinder - Connecting Developers since 2025</p>
                 <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+                <div className="flex gap-4 mt-4">
+                    <Link to="/terms-of-service" className="link link-hover">
+                        Terms of Service
+                    </Link>
+                    <Link to="/privacy-policy" className="link link-hover">
+                        Privacy Policy
+                    </Link>
+                    <Link to="/contact-us" className="link link-hover">
+                        Contact Us
+                    </Link>
+                    <Link to="/cancellation-and-refund" className="link link-hover">
+                        Cancellation And Refund
+                    </Link>
+                    <Link to="/shipping-And-delivery" className="link link-hover">
+                        Shipping And Delivery
+                    </Link>
+                </div>
             </aside>
             <nav>
                 <div className="grid grid-flow-col gap-4">
-                    <a href="https://www.linkedin.com/in/harsh-mann01/" target="_blank">
+                    <a href="https://www.linkedin.com/in/harsh-mann01/" target="_blank" rel="noopener noreferrer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -22,7 +41,7 @@ const Footer = () => {
                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 11.268h-3v-5.604c0-1.336-.026-3.06-1.865-3.06-1.865 0-2.152 1.458-2.152 2.965v5.699h-3v-10h2.879v1.365h.042c.401-.759 1.379-1.56 2.839-1.56 3.038 0 3.597 2 3.597 4.604v5.591z" />
                         </svg>
                     </a>
-                    <a href="https://github.com/harshmann10" target="_blank">
+                    <a href="https://github.com/harshmann10" target="_blank" rel="noopener noreferrer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
