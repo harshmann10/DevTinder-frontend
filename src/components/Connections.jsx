@@ -1,14 +1,14 @@
-// import axios from "axios";
 import { useEffect } from "react";
-// import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnection } from "../utils/connectionSlice";
 import api from "../utils/apiAxios";
+import { useNavigate } from "react-router-dom";
 
 function Connections() {
     const dispatch = useDispatch();
     const connections = useSelector((store) => store.connections);
-
+    const navigate = useNavigate();
+    
     const fetchConnection = async () => {
         try {
             const res = await api.get("/user/connections");
@@ -50,14 +50,14 @@ function Connections() {
                 return (
                     <div
                         key={_id}
-                        className="container bg-base-300 m-4 p-4 rounded-lg flex w-3/4 mx-auto gap-2"
+                        className="container bg-base-300 m-4 p-4 rounded-lg flex w-3/4 mx-auto gap-5 items-center"
                     >
                         <img
                             className="w-32 h-32 object-cover rounded-full"
                             src={photoUrl}
-                            alt="photo"
+                            alt={`${firstName} ${lastName}`}
                         />
-                        <div className="text-left mx-4">
+                        <div className="text-left flex-grow">
                             <h2 className="font-bold text-xl mb-1">
                                 {firstName + " " + lastName}
                             </h2>
@@ -138,6 +138,14 @@ function Connections() {
                                         )}
                                     </div>
                                 )}
+                        </div>
+                        <div className="ml-auto pl-4">
+                            <button
+                                className="btn btn-primary gap-2"
+                                onClick={() => navigate(`/chat/${_id}`, { state: { targetUser: connection } })}
+                            >
+                                Chat
+                            </button>
                         </div>
                     </div>
                 );

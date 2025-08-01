@@ -15,6 +15,7 @@ import {
   PrivacyPolicy,
   CancellationAndRefund,
   ShippingAndDelivery,
+  Chat,
 } from "./components";
 import { useSelector } from "react-redux";
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="connections" element={<Connections />} />
             <Route path="requests" element={<Requests />} />
+            <Route path="chat/:targetUserId" element={<Chat />} />
             <Route path="*" element={user ? <Feed /> : <HomePage />} />
           </Route>
           <Route path="/reset-password/:token" element={<ResetPassword />} />
