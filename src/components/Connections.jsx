@@ -33,7 +33,7 @@ function Connections() {
         );
 
     return (
-        <div className="text-center mt-5 min-h-[100px] w-full">
+        <div className="text-center mt-5 min-h-[90px] w-full">
             <h1 className="font-bold text-3xl mb-7">Connections</h1>
             {connections.map((connection) => {
                 const {
@@ -141,7 +141,7 @@ function Connections() {
                         </div>
                         <div className="ml-auto pl-4">
                             <button
-                                className="btn btn-primary gap-2"
+                                className="btn btn-primary gap-2 w-28"
                                 onClick={() => navigate(`/chat/${_id}`, { state: { targetUser: connection } })}
                             >
                                 Chat

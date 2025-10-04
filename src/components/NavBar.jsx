@@ -31,16 +31,18 @@ const Navbar = () => {
         </Link>
       </div>
       {user ? (
-        <div className="flex-none gap-3 text-xl">
-          <p>Welcome, {user.firstName} </p>
+        <div className="flex-none gap-3">
           <div className="dropdown dropdown-end mr-4">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar"
+              className="btn btn-ghost flex items-center gap-2 relative before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-white/30 before:animate-pulse hover:before:border-white/50 transition-all"
             >
-              <div className="w-10 rounded-full">
-                <img alt="user photo" src={user.photoUrl} />
+              <p className="text-xl">Welcome, {user.firstName} </p>
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img alt="user photo" src={user.photoUrl} />
+                </div>
               </div>
             </div>
             <ul
@@ -63,6 +65,11 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
+                <Link to="premuim">
+                  Premium <span className="badge">💎</span>
+                </Link>
+              </li>
+              <li>
                 <Link
                   onClick={handleLogout}
                   className="text-red-400 hover:text-red-300"
@@ -81,7 +88,8 @@ const Navbar = () => {
           <Link to={"/login"}>
             <button className="btn px-5 btn-outline">Log In</button>
           </Link>
-        </div>)}
+        </div>
+      )}
     </div>
   );
 };
