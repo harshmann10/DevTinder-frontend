@@ -17,7 +17,7 @@ import TermsOfService from "./policy/TermsOfService";
 import CancellationAndRefund from "./policy/CancellationAndRefund";
 import ShippingAndDelivery from "./policy/ShippingAndDelivery";
 import Chat from "./Chat"
-import Premium from "./premium";
+import Premium from "./Premium";
 
 export {
     NavBar,
