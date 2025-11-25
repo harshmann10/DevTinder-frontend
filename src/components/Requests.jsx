@@ -1,5 +1,3 @@
-// import axios from "axios";
-// import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
@@ -40,7 +38,7 @@ function Requests() {
     );
 
   return (
-    <div className="text-center min-h-screen w-full mt-5">
+    <div className="text-center w-full mt-5">
       <h1 className="font-bold text-3xl mb-7">Connections Requests</h1>
       {requests.map((request) => {
         const {

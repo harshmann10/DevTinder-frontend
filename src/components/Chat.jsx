@@ -1,20 +1,21 @@
 import { useState, useEffect, useRef, Fragment } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { createSocketConnection } from "../utils/constants";
+import { useParams, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useSelector } from "react-redux";
 import api from "../utils/apiAxios";
 
 function Chat() {
     const { targetUserId } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const [newMessages, setNewMessages] = useState("");
+
+    const onlineUsers = useSelector((store) => store.onlineUsers);
     const user = useSelector((store) => store.user);
     const userId = user?._id;
     const targetUser = location.state?.targetUser;
-    // 1. Initialize the socket only once using the useState initializer function.
-    // This ensures the socket instance is created only on the initial render.
-    const [socket] = useState(() => createSocketConnection());
+    const socket = useOutletContext();
+    const isOnline = onlineUsers?.includes(targetUserId);
     const chatEndRef = useRef(null);
 
     useEffect(() => {
@@ -45,7 +46,6 @@ function Chat() {
     // 2. This effect now handles joining rooms and listening for messages.
     // It will only run if user, userId, and socket are available.
     useEffect(() => {
-        // Ensure user object and its firstName property exist before emitting
         if (!user || !user.firstName || !userId || !socket) {
             return;
         }
@@ -55,7 +55,6 @@ function Chat() {
         const handleMessageReceived = ({ firstName, text, createdAt }) => {
             setMessages((prevMessages) => [
                 ...prevMessages,
-                // Safely access user.firstName here as well
                 { from: firstName === user?.firstName ? "me" : "other", text, createdAt },
             ]);
         };
@@ -69,16 +68,7 @@ function Chat() {
         };
     }, [userId, targetUserId, user, socket]); // Depend on the entire user object and socket
 
-    // 3. Add a new effect to handle disconnecting when the component unmounts.
-    // This ensures the socket connection is closed only when the Chat component is removed.
-    useEffect(() => {
-        return () => {
-            socket.disconnect();
-        };
-    }, [socket]); // Depend on socket to ensure cleanup runs when socket is available
-
     const sendMessage = () => {
-        // Also ensure user and socket are available before sending
         if (newMessages.trim() === "" || !socket || !user || !user.firstName) return;
         socket.emit("sendMessage", { firstName: user.firstName, userId, targetUserId, text: newMessages });
         setNewMessages("");
@@ -110,12 +100,39 @@ function Chat() {
         });
     };
 
+    const formatLastSeen = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        if (diffSeconds < 60) return 'last seen just now';
+        if (diffSeconds < 3600) return `last seen ${Math.floor(diffSeconds / 60)}m ago`;
+
+        if (date.toDateString() === now.toDateString()) {
+            return `last seen today at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        const yesterday = new Date(now);
+        yesterday.setDate(now.getDate() - 1);
+        if (date.toDateString() === yesterday.toDateString()) {
+            return `last seen yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        return `last seen on ${date.toLocaleDateString()}`;
+    };
+
     let lastDisplayedDate = null;
 
     return (
         <div className="w-full max-w-3xl mx-auto border border-base-300 bg-base-200 shadow-xl rounded-lg my-5 h-[80vh] flex flex-col">
             <div className="p-4 border-b border-base-300 flex items-center gap-4 bg-base-300 rounded-t-lg">
-                <div className="avatar">
+                <button className="btn btn-ghost btn-circle" onClick={() => navigate(-1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    </svg>
+                </button>
+                <div className={`avatar ${isOnline ? 'online' : ''}`}>
                     <div className="w-12 rounded-full">
                         <img
                             src={targetUser?.photoUrl}
@@ -123,10 +140,13 @@ function Chat() {
                         />
                     </div>
                 </div>
-                <div>
+                <div className="flex-1">
                     <h2 className="font-bold text-xl">
                         {targetUser ? `${targetUser.firstName} ${targetUser.lastName}` : "Loading..."}
                     </h2>
+                    <p className={`text-sm ${isOnline ? 'text-success font-semibold' : 'text-gray-500'}`}>
+                        {isOnline ? 'Online' : formatLastSeen(targetUser?.lastSeen)}
+                    </p>
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto p-5 space-y-2">
@@ -155,7 +175,7 @@ function Chat() {
                                     </div>
                                 </div>
                                 <div className="chat-header">
-                                    {msg.from === 'me' ? 'You' : targetUser?.firstName || 'Chat partner'}
+                                    {msg.from === 'me' ? 'You' : `${targetUser?.firstName} ${targetUser?.lastName}` || 'Chat partner'}
                                     <time className="text-xs opacity-50 ml-2">
                                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </time>

@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 function Connections() {
     const dispatch = useDispatch();
     const connections = useSelector((store) => store.connections);
+    const onlineUsers = useSelector((store) => store.onlineUsers);
     const navigate = useNavigate();
-    
+
     const fetchConnection = async () => {
         try {
             const res = await api.get("/user/connections");
@@ -25,12 +26,34 @@ function Connections() {
     if (!connections) return;
     if (connections.length === 0)
         return (
-            <div className="min-h-screen text-center mt-10">
+            <div className="text-center mt-10">
                 <h1 className="text-2xl font-semibold text-gray-500">
                     No connections found
                 </h1>
             </div>
         );
+
+    const formatLastSeen = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        if (diffSeconds < 60) return 'last seen just now';
+        if (diffSeconds < 3600) return `last seen ${Math.floor(diffSeconds / 60)}m ago`;
+
+        if (date.toDateString() === now.toDateString()) {
+            return `last seen today at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        const yesterday = new Date(now);
+        yesterday.setDate(now.getDate() - 1);
+        if (date.toDateString() === yesterday.toDateString()) {
+            return `last seen yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        return `last seen on ${date.toLocaleDateString()}`;
+    };
 
     return (
         <div className="text-center mt-5 min-h-[90px] w-full">
@@ -52,17 +75,23 @@ function Connections() {
                         key={_id}
                         className="container bg-base-300 m-4 p-4 rounded-lg flex w-3/4 mx-auto gap-5 items-center"
                     >
-                        <img
-                            className="w-32 h-32 object-cover rounded-full"
-                            src={photoUrl}
-                            alt={`${firstName} ${lastName}`}
-                        />
+                        <div className={`avatar ${onlineUsers?.includes(_id) ? 'online' : ''}`}>
+                            <div className="w-32 h-32 rounded-full">
+                                <img
+                                    src={photoUrl}
+                                    alt={`${firstName} ${lastName}`}
+                                />
+                            </div>
+                        </div>
                         <div className="text-left flex-grow">
-                            <h2 className="font-bold text-xl mb-1">
+                            <h2 className="font-bold text-xl">
                                 {firstName + " " + lastName}
                             </h2>
-                            <p className="mb-0.5">{age + ", " + gender}</p>
-                            <p>{about}</p>
+                            <p className="text-base text-gray-400 mb-0.5">{age + ", " + gender}</p>
+                            <p className={`text-sm ${onlineUsers?.includes(_id) ? 'text-success font-semibold' : 'text-gray-500'}`}>
+                                {onlineUsers?.includes(_id) ? 'Online' : formatLastSeen(connection?.lastSeen)}
+                            </p>
+                            <p className="mt-1">{about}</p>
                             {skills?.length > 0 && (
                                 <div className="card-actions my-1 items-baseline">
                                     <h3 className="font-semibold text-base">Skills:</h3>
