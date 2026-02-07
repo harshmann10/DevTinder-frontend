@@ -28,6 +28,9 @@ function EditProfile({ user, setMode }) {
         message: "",
         type: "",
     });
+    const [photoFile, setPhotoFile] = useState(null);
+    const [fileError, setFileError] = useState("");
+    const [photoPreview, setPhotoPreview] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -60,7 +63,20 @@ function EditProfile({ user, setMode }) {
     const saveProfile = async () => {
         setError("");
         try {
-            const res = await api.patch("/profile/edit", profileData);
+            const formData = new FormData();
+            formData.append("firstName", profileData.firstName);
+            formData.append("lastName", profileData.lastName);
+            formData.append("age", profileData.age);
+            formData.append("gender", profileData.gender);
+            formData.append("about", profileData.about);
+            profileData.skills.forEach(skill => formData.append("skills", skill));
+            formData.append("socialLinks[github]", profileData.socialLinks.github);
+            formData.append("socialLinks[linkedin]", profileData.socialLinks.linkedin);
+            formData.append("socialLinks[twitter]", profileData.socialLinks.twitter);
+            if (photoFile) {
+                formData.append("photo", photoFile);
+            }
+            const res = await api.patch("/profile/edit", formData);
             dispatch(addUser(res.data?.data));
             setShowToast(true);
             const timer = setTimeout(() => {
@@ -120,7 +136,7 @@ function EditProfile({ user, setMode }) {
                                 type="text"
                                 placeholder="Enter your First Name here"
                                 className="input input-bordered w-full max-w-xs"
-                                name="firstName" // Added name attribute
+                                name="firstName"
                                 value={profileData.firstName}
                                 onChange={handleProfileDataChange}
                             />
@@ -133,7 +149,7 @@ function EditProfile({ user, setMode }) {
                                 type="text"
                                 placeholder="Enter your Last Name here"
                                 className="input input-bordered w-full max-w-xs"
-                                name="lastName" // Added name attribute
+                                name="lastName"
                                 value={profileData.lastName}
                                 onChange={handleProfileDataChange}
                             />
@@ -146,7 +162,7 @@ function EditProfile({ user, setMode }) {
                                 type="text"
                                 placeholder="Enter your Age here"
                                 className="input input-bordered w-full max-w-xs"
-                                name="age" // Added name attribute
+                                name="age"
                                 value={profileData.age}
                                 onChange={handleProfileDataChange}
                             />
@@ -157,7 +173,7 @@ function EditProfile({ user, setMode }) {
                             </div>
                             <select
                                 className="input input-bordered w-full max-w-xs"
-                                name="gender" // Added name attribute
+                                name="gender"
                                 value={profileData.gender}
                                 onChange={handleProfileDataChange}
                             >
@@ -169,16 +185,31 @@ function EditProfile({ user, setMode }) {
                         </label>
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
-                                <span className="label-text">Photo URL</span>
+                                <span className="label-text">Upload Image</span>
                             </div>
                             <input
-                                type="text"
-                                placeholder="Enter your Photo URL here"
-                                className="input input-bordered w-full max-w-xs"
-                                name="photoUrl" // Added name attribute
-                                value={profileData.photoUrl}
-                                onChange={handleProfileDataChange}
+                                type="file"
+                                className="file-input file-input-bordered w-full max-w-xs"
+                                name="photoUrl"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+
+                                    const MAX_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+                                    if (file.size > MAX_SIZE) {
+                                        setFileError("File is too large. Please select a file smaller than 5MB.");
+                                        setPhotoFile(null);
+                                        setPhotoPreview(null);
+                                        e.target.value = null;
+                                        return;
+                                    }
+                                    setFileError("");
+                                    setPhotoFile(file);
+                                    setPhotoPreview(URL.createObjectURL(file));
+                                }}
                             />
+                            {fileError && <p className="text-red-500 text-xs mt-1">{fileError}</p>}
                         </label>
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
@@ -188,7 +219,7 @@ function EditProfile({ user, setMode }) {
                                 type="text"
                                 placeholder="Enter your Skills"
                                 className="input input-bordered w-full max-w-xs"
-                                name="skills" // Added name attribute
+                                name="skills"
                                 value={profileData.skills.join(", ")}
                                 onChange={handleSkillsChange}
                             />
@@ -201,7 +232,7 @@ function EditProfile({ user, setMode }) {
                                 rows={2}
                                 placeholder="Enter your About here"
                                 className="textarea textarea-bordered"
-                                name="about" // Added name attribute
+                                name="about"
                                 value={profileData.about}
                                 onChange={handleProfileDataChange}
                             />
@@ -271,7 +302,7 @@ function EditProfile({ user, setMode }) {
                 </div>
             </div>
             <div className="w-full max-w-md md:w-96 self-start">
-                <UserCard user={profileData} actionsDisabled={true} />
+                <UserCard user={{ ...profileData, photoUrl: photoPreview || profileData.photoUrl }} actionsDisabled={true} />
             </div>
             {showtoast && (
                 <div className="toast toast-top toast-center z-50">

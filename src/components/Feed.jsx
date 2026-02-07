@@ -1,5 +1,3 @@
-// import axios from "axios";
-// import { BASE_URL } from "../utils/constants";
 import api from "../utils/apiAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";

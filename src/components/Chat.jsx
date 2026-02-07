@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, Fragment } from "react";
 import { useParams, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useSelector } from "react-redux";
 import api from "../utils/apiAxios";
+import EmojiPicker from "emoji-picker-react";
 
 function Chat() {
     const { targetUserId } = useParams();
@@ -9,6 +10,7 @@ function Chat() {
     const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const [newMessages, setNewMessages] = useState("");
+    const [showPicker, setShowPicker] = useState(false);
 
     const onlineUsers = useSelector((store) => store.onlineUsers);
     const user = useSelector((store) => store.user);
@@ -17,6 +19,21 @@ function Chat() {
     const socket = useOutletContext();
     const isOnline = onlineUsers?.includes(targetUserId);
     const chatEndRef = useRef(null);
+    const emojiPickerRef = useRef(null);
+
+    // close emoji picker if clicked anywhere else
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                setShowPicker(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [emojiPickerRef]);
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -43,7 +60,7 @@ function Chat() {
         fetchChatMessage();
     }, [userId, targetUserId]);
 
-    // 2. This effect now handles joining rooms and listening for messages.
+    // This effect now handles joining rooms and listening for messages.
     // It will only run if user, userId, and socket are available.
     useEffect(() => {
         if (!user || !user.firstName || !userId || !socket) {
@@ -62,11 +79,10 @@ function Chat() {
         socket.on("messageReceived", handleMessageReceived);
 
         // Cleanup: remove the message listener when the user or chat changes.
-        // This prevents multiple listeners from accumulating.
         return () => {
             socket.off("messageReceived", handleMessageReceived);
         };
-    }, [userId, targetUserId, user, socket]); // Depend on the entire user object and socket
+    }, [userId, targetUserId, user, socket]);
 
     const sendMessage = () => {
         if (newMessages.trim() === "" || !socket || !user || !user.firstName) return;
@@ -79,6 +95,10 @@ function Chat() {
             e.preventDefault();
             sendMessage();
         }
+    };
+
+    const onEmojiClick = (emojiObject) => {
+        setNewMessages((prev) => prev + emojiObject.emoji);
     };
 
     const formatDateBanner = (dateString) => {
@@ -192,6 +212,19 @@ function Chat() {
             {/* Message Input */}
             <div className="p-4 border-t border-base-300 bg-base-300 rounded-b-lg">
                 <div className="flex items-center gap-2">
+                    <div className="relative" ref={emojiPickerRef}>
+                        <button
+                            className="btn btn-ghost btn-circle"
+                            onClick={() => setShowPicker(!showPicker)}
+                        >
+                            <span className="text-xl">😊</span>
+                        </button>
+                        {showPicker && (
+                            <div className="absolute bottom-12 left-0 z-50">
+                                <EmojiPicker onEmojiClick={onEmojiClick} lazyLoadEmojis={true} theme="auto" />
+                            </div>
+                        )}
+                    </div>
                     <input
                         className="input input-bordered w-full"
                         type="text"

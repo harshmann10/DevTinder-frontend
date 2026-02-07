@@ -8,8 +8,10 @@
 
 - **Frontend:** React.js, Vite, Redux Toolkit, Tailwind CSS
 - **State Management:** Redux Toolkit
+- **Real-time Communication:** Socket.io
 - **Backend:** [DevTinder backend](https://github.com/harshmann10/DevTinder-backend)
 - **Authentication:** JWT
+- **Payment Gateway:** Razorpay
 - **Database:** MongoDB (via backend)
 
 ## 🏗️ Installation & Setup
@@ -47,6 +49,9 @@ npm run dev
 - ✏️ **Edit Profile** - Update personal details, skills, and bio.
 - 📩 **Send Connection Requests** - Request to connect with other developers.
 - ✅ **Review Connection Requests** - Accept or reject incoming connection requests.
+- 💬 **Real-time Chat** - Send and receive messages instantly using Socket.io.
+- 👥 **Online Status & Last Seen** - Track user availability and last activity in real-time.
+- 💳 **Razorpay Payment Integration** - Premium membership with secure payment processing.
 - 🌍 **Responsive Design** - Fully optimized for mobile & desktop.
 
 ## 🔧 API Endpoints
