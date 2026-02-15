@@ -1,21 +1,21 @@
-import React from "react";
+import { FaLightbulb, FaLock, FaProjectDiagram } from "react-icons/fa";
 
 function Features() {
   const features = [
     {
-      icon: "/coder.svg",
+      icon: FaLightbulb,
       title: "Smart Matching",
       description: "Find developers with similar interests, skills, and goals to collaborate on meaningful projects.",
       gradient: "from-blue-500 to-blue-600"
     },
     {
-      icon: "/lock.svg",
+      icon: FaLock,
       title: "Secure & Private",
       description: "Enterprise-grade security with JWT authentication and encrypted communications to protect your data.",
       gradient: "from-purple-500 to-purple-600"
     },
     {
-      icon: "/project.svg",
+      icon: FaProjectDiagram,
       title: "Project Focused",
       description: "Collaborate on real projects, build your portfolio, and create something amazing together.",
       gradient: "from-pink-500 to-pink-600"
@@ -47,7 +47,7 @@ function Features() {
               <div className="relative bg-slate-900/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700/50 group-hover:border-slate-600 transition-all h-full flex flex-col">
                 {/* Icon container with gradient background */}
                 <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} p-3 mb-6 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center`}>
-                  <img src={feature.icon} alt={feature.title} className="w-8 h-8" />
+                  <feature.icon className="w-8 h-8 text-white" />
                 </div>
 
                 {/* Text content */}

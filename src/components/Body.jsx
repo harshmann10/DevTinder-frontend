@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import api from "../utils/apiAxios";
@@ -11,46 +11,27 @@ import { updateLastSeen } from "../utils/connectionSlice";
 
 function Body() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
     const userData = useSelector((store) => store.user);
     const [socket, setSocket] = useState(null);
-
-    // Define paths that are explicitly public and do not require a logged-in user
-    // and where a failed user fetch should NOT cause a redirect.
-    const publicPaths = [
-        "/",
-        "/terms-of-service",
-        "/privacy-policy",
-        "/contact-us",
-        "/cancellation-and-refund",
-        "/shipping-And-delivery",
-        "/login",
-        "/signup",
-        "/forgot-password",
-    ];
 
     const fetchUser = async () => {
         try {
             const user = await api.get("/profile/view");
             dispatch(addUser(user.data));
         } catch (err) {
-            console.error("Failed to fetch user profile:", err);
-
-            // Only redirect to login if the error is 401 (Unauthorized)
-            // AND the current path is NOT one of the public paths.
-            // For other errors or if on a public path, do not force a redirect.
-            if (err.response?.status === 401 && !publicPaths.includes(location.pathname)) {
-                navigate("/login");
+            // If 401, it just means the user isn't logged in and we don't need to log an error or redirect here.
+            if (err.response?.status !== 401) {
+                console.error("Unexpected error fetching profile:", err);
             }
         }
     };
 
     useEffect(() => {
+        // Fetch user only if we don't have one
         if (!userData) {
             fetchUser();
         }
-    }, [userData, location.pathname]);
+    }, [userData]);
 
     // Initialize socket connection and set up global online status listeners
     useEffect(() => {

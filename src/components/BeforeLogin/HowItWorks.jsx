@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { FaUser, FaHeart, FaHandshake } from "react-icons/fa";
 
 const testimonials = [
   {
@@ -36,19 +37,19 @@ const testimonials = [
 const steps = [
   {
     number: "01",
-    icon: "/profile.svg",
+    icon: FaUser,
     title: "Create Your Profile",
     description: "Set up your developer profile with your skills, interests, and project ideas."
   },
   {
     number: "02",
-    icon: "/Match.svg",
+    icon: FaHeart,
     title: "Get Smart Matches",
     description: "Our AI algorithm finds developers that match your interests and goals."
   },
   {
     number: "03",
-    icon: "/collab.svg",
+    icon: FaHandshake,
     title: "Start Collaborating",
     description: "Connect, chat, and build amazing projects together with your matches."
   }
@@ -134,7 +135,7 @@ function HowItWorks() {
 
                   {/* Icon */}
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-3 mb-6 flex items-center justify-center group-hover:from-blue-500/40 group-hover:to-cyan-500/40 transition-all">
-                    <img src={step.icon} alt={step.title} className="w-8 h-8" />
+                    <step.icon className="w-8 h-8 text-blue-400" />
                   </div>
 
                   {/* Content */}

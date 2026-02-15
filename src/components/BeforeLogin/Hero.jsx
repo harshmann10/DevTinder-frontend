@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaCheckCircle, FaCode } from "react-icons/fa";
 
 function Hero() {
     return (
@@ -37,22 +38,20 @@ function Hero() {
                     </div>
                     <div className="flex gap-8 pt-4 text-sm text-slate-400">
                         <div className="flex items-center gap-2">
-                            <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                            <FaCheckCircle className="w-5 h-5 text-green-400" />
                             <span>Free to join</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                            <FaCheckCircle className="w-5 h-5 text-green-400" />
                             <span>Verified developers</span>
                         </div>
                     </div>
                 </div>
                 <div className="relative md:flex-1 flex justify-center">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-400/10 rounded-3xl blur-2xl"></div>
-                    <img
-                        src="/dev.svg"
-                        alt="Developer coding illustration"
-                        className="relative w-full max-w-md md:max-w-lg drop-shadow-2xl animate-float"
-                    />
+                    <div className="relative w-full max-w-md md:max-w-lg drop-shadow-2xl animate-float flex items-center justify-center">
+                        <FaCode className="w-48 h-48 text-blue-400/30" />
+                    </div>
                 </div>
             </div>
         </section>
